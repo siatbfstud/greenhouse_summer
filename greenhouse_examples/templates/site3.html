@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}
+Site 3
+{% endblock %}
+{% block content %}
+<h1>Site 3</h1>
+<h2>Pumpe</h2>
+Fugtighed : <span id="fugtighed"></span><br/>
+<input oninput="pump()"type="range"min="0"max="100"id="pumpe"/>
+
+<script>
+    var socket = io();
+    socket.emit('gather_soil_percent')
+    function pump() {
+        socket.emit('pumpstate', document.getElementById('pumpe').value)
+    }
+    socket.on("soil", function(data) {
+        console.log(data)
+    if (data != 'None') {
+        document.getElementById('fugtighed').innerText = data
+    }
+    socket.emit('gather_soil_percent');
+});
+</script>
+{% endblock %}
+

@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <h2>Skru på lyset</h2>
+        <input oninput="skru()"type="range"min="0"max="50"id="lysstyrke"/>
+        <script>
+            var socket = io();
+            function skru() {
+                socket.emit('skru_fra_browser',                
+                {
+                    'lysstyrke' : document.getElementById('lysstyrke').value
+                })
+            }
+        </script>
+    </body>
+</html>

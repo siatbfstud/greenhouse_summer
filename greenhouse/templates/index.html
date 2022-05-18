@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Title</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css') }}"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <h1>INDEXPAGE</h1>
+        <h2>RED LED</h2>
+        <input oninput="RED_LED()"type="range"min="0"max="30"id="red_led"/>
+        <br>
+        <h2>BLUE LED</h2>
+        <input oninput="BLUE_LED()"type="range"min="0"max="25"id="blue_led"/>
+        
+        <br>
+        
+        <h2>Jordfugtighedsmåler</h2>
+        Jordfugtighed : <span id="fugtighed"></span><br/>
+        
+        <h2>Pumpe override</h2>
+        <input oninput="pump()"type="range"min="0"max="1"id="pumpe"/>
+
+        <script>
+            var socket = io();
+            socket.emit('gather_soil_percent')
+
+            function RED_LED() {
+                socket.emit('red_led_state', document.getElementById('red_led').value)
+                console.log(document.getElementById('red_led').value)
+            };
+
+            function BLUE_LED() {
+                socket.emit('blue_led_state', document.getElementById('blue_led').value)
+                console.log(document.getElementById('blue_led').value)
+            };
+
+            function pump() {
+                socket.emit('pumpstate', document.getElementById('pumpe').value)
+            }
+
+            socket.on("soil", function(data) {
+                console.log(data)
+            if (data != 'None') {
+                document.getElementById('fugtighed').innerText = data
+            }
+            socket.emit('gather_soil_percent');
+        });
+        </script>
+    </body>

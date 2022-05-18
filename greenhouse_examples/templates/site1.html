@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}
+Site 1
+{% endblock %}
+{% block content %}
+<h1>Site 1</h1>
+<h2>Skru på lyset</h2>
+<input oninput="skru()"type="range"min="0"max="50"id="lysstyrke"/>
+<script>
+    var socket = io();
+    function skru() {
+        socket.emit('skru_fra_browser',                
+        {
+            'lysstyrke' : document.getElementById('lysstyrke').value
+        })
+    }
+</script>
+{% endblock %}
